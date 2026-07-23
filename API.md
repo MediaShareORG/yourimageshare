@@ -1,0 +1,312 @@
+# YourImageShare API Reference
+
+A small JSON/REST API for uploading, listing, and deleting files on
+[YourImageShare](https://yourimageshare.com). No SDK required, just an HTTP
+client and an API key.
+
+- **Base URL:** `https://yourimageshare.com/api`
+- **Format:** JSON in and out, except uploads which are `multipart/form-data`
+- **Auth:** an API key on every request
+
+## Table of contents
+
+- [Getting an API key](#getting-an-api-key)
+- [Authentication](#authentication)
+- [Endpoints](#endpoints)
+  - [POST /api - Upload a file](#post-api---upload-a-file)
+  - [GET /api - List your uploads](#get-api---list-your-uploads)
+  - [DELETE /api/{id} - Delete an upload](#delete-apiid---delete-an-upload)
+- [Rate limits](#rate-limits)
+- [Errors](#errors)
+- [Code examples](#code-examples)
+
+## Getting an API key
+
+Sign in, go to [My account](https://yourimageshare.com/my-account), and open
+the **API** tab. Your key is shown there, along with a **Regenerate**
+button. Regenerating a key invalidates the old one immediately, so update
+anywhere it's in use before you click it.
+
+## Authentication
+
+Send your key one of two ways. If both are present, the query parameter
+wins.
+
+```
+?key=YOUR_API_KEY
+```
+
+```
+X-API-Key: YOUR_API_KEY
+```
+
+Treat your key like a password - anyone with it can upload, list, and
+delete on your account.
+
+## Endpoints
+
+All three endpoints share the same authentication and rate limiting.
+
+### POST /api - Upload a file
+
+Uploads a single file for the authenticated account.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `uploads` | file | yes | The file to upload. One file per request - this endpoint does not batch-upload multiple files. |
+
+Accepted types: JPEG, PNG, GIF images; MP4, WebM, AVI video (exact list is
+server-configurable and may expand over time). Max size is
+server-configurable; oversized or unreadable files are rejected with a
+`422`.
+
+Response - `200 OK`:
+
+```json
+{
+  "type": "success",
+  "msg": "success",
+  "data": {
+    "id": "aB3xY9qRz1",
+    "type": "image",
+    "path": "https://i.yourimageshare.com/aB3xY9qRz1.webp",
+    "src": "https://yourimageshare.com/ib/aB3xY9qRz1.webp",
+    "direct": "https://yourimageshare.com/ib/aB3xY9qRz1"
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `id` | The file's unique identifier. |
+| `type` | `image` or `video`. |
+| `path` | The raw storage URL of the uploaded file. |
+| `src` | Direct file URL - opens the file itself, suitable for an `<img>`/`<video>` `src`. |
+| `direct` | The file's page on YourImageShare (title, description, comments, share options). |
+
+### GET /api - List your uploads
+
+Returns a paginated list of the authenticated account's uploads (from any
+source - API, website, or editor), newest first, 50 per page.
+
+| Parameter | In | Required | Description |
+|---|---|---|---|
+| `page` | query | no | Page number, defaults to 1. |
+
+Response - `200 OK`:
+
+```json
+{
+  "type": "success",
+  "data": [
+    {
+      "id": "aB3xY9qRz1",
+      "type": "image",
+      "title": null,
+      "path": "https://i.yourimageshare.com/aB3xY9qRz1.webp",
+      "src": "https://yourimageshare.com/ib/aB3xY9qRz1.webp",
+      "direct": "https://yourimageshare.com/ib/aB3xY9qRz1",
+      "created_at": "2026-07-23T15:43:28+01:00"
+    }
+  ],
+  "meta": { "current_page": 1, "last_page": 1, "total": 1 }
+}
+```
+
+`path`, `src`, and `direct` mean the same thing here as they do on the
+upload response above. There's no single "get one upload" endpoint yet, so
+this list is also the way to look up a file's `id` after the fact.
+
+### DELETE /api/{id} - Delete an upload
+
+Permanently deletes one of the authenticated account's uploads. This
+cannot be undone from the API. `{id}` is the value returned as `id` by the
+upload or list endpoints.
+
+Response - `200 OK`:
+
+```json
+{ "type": "success", "msg": "Deleted." }
+```
+
+`404` if no upload with that id exists on your account (either it was
+never yours, or it's already been deleted).
+
+## Rate limits
+
+Each API key has independent per-minute and per-day quotas, plus a coarser
+per-IP daily ceiling as a backstop against one IP cycling through multiple
+keys. All three endpoints share the same limits - there's no extra cost
+for uploads versus lists or deletes.
+
+| Window | Default limit | Scope |
+|---|---|---|
+| Per minute | 20 requests | per API key |
+| Per day | 500 requests | per API key |
+| Per day | 2,000 requests | per IP address |
+
+These defaults are admin-configurable and may change. Every response
+includes standard rate-limit headers:
+
+```
+X-RateLimit-Limit: 20
+X-RateLimit-Remaining: 14
+```
+
+A `429` is returned once a limit is exceeded, with a `Retry-After` header
+telling you how many seconds to wait.
+
+## Errors
+
+Every error response uses the same shape, regardless of endpoint or cause:
+
+```json
+{ "type": "error", "errors": "A human-readable description of what went wrong." }
+```
+
+| Status | Meaning |
+|---|---|
+| 401 | Missing or invalid API key. |
+| 403 | The account or your current IP has been banned from uploading. |
+| 404 | No matching upload found for that id on this account (delete only). |
+| 422 | Validation failure - no file provided, an unsupported file type, unreadable image data, or dimensions over the 30000x30000px limit. |
+| 429 | Rate limit exceeded - see [Rate limits](#rate-limits) above. |
+| 500 | Something failed unexpectedly server-side. Safe to retry. |
+
+## Code examples
+
+### curl
+
+```bash
+# Upload a file
+curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+  -F "uploads=@/path/to/photo.jpg"
+
+# List uploads
+curl "https://yourimageshare.com/api?key=YOUR_API_KEY"
+
+# Delete an upload
+curl -X DELETE "https://yourimageshare.com/api/aB3xY9qRz1?key=YOUR_API_KEY"
+```
+
+### JavaScript (fetch)
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const BASE = 'https://yourimageshare.com/api';
+
+async function uploadFile(file) {
+  const form = new FormData();
+  form.append('uploads', file);
+
+  const res = await fetch(`${BASE}?key=${API_KEY}`, {
+    method: 'POST',
+    body: form,
+  });
+  const json = await res.json();
+  if (json.type !== 'success') throw new Error(json.errors);
+  return json.data;
+}
+
+async function listUploads(page = 1) {
+  const res = await fetch(`${BASE}?key=${API_KEY}&page=${page}`);
+  return res.json();
+}
+
+async function deleteUpload(id) {
+  const res = await fetch(`${BASE}/${id}?key=${API_KEY}`, { method: 'DELETE' });
+  return res.json();
+}
+```
+
+### Python (requests)
+
+```python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+BASE = "https://yourimageshare.com/api"
+
+# Upload a file
+with open("/path/to/photo.jpg", "rb") as f:
+    res = requests.post(BASE, params={"key": API_KEY}, files={"uploads": f})
+res.raise_for_status()
+upload = res.json()["data"]
+
+# List uploads
+res = requests.get(BASE, params={"key": API_KEY, "page": 1})
+uploads = res.json()
+
+# Delete an upload
+res = requests.delete(f"{BASE}/{upload['id']}", params={"key": API_KEY})
+```
+
+### PHP (curl)
+
+```php
+<?php
+
+$apiKey = 'YOUR_API_KEY';
+$base = 'https://yourimageshare.com/api';
+
+// Upload a file
+$curl = curl_init("$base?key=$apiKey");
+curl_setopt_array($curl, [
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => ['uploads' => new CURLFile('/path/to/photo.jpg')],
+    CURLOPT_RETURNTRANSFER => true,
+]);
+$upload = json_decode(curl_exec($curl), true)['data'];
+curl_close($curl);
+
+// List uploads
+$curl = curl_init("$base?key=$apiKey&page=1");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$uploads = json_decode(curl_exec($curl), true);
+curl_close($curl);
+```
+
+### Go (net/http)
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "io"
+    "mime/multipart"
+    "net/http"
+    "os"
+)
+
+const apiKey = "YOUR_API_KEY"
+const base = "https://yourimageshare.com/api"
+
+func uploadFile(path string) (map[string]any, error) {
+    file, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+    defer file.Close()
+
+    body := &bytes.Buffer{}
+    writer := multipart.NewWriter(body)
+    part, _ := writer.CreateFormFile("uploads", path)
+    io.Copy(part, file)
+    writer.Close()
+
+    req, _ := http.NewRequest("POST", base+"?key="+apiKey, body)
+    req.Header.Set("Content-Type", writer.FormDataContentType())
+
+    res, err := http.DefaultClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer res.Body.Close()
+
+    var result map[string]any
+    json.NewDecoder(res.Body).Decode(&result)
+    return result, nil
+}
+```
