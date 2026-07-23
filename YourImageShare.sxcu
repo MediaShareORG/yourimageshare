@@ -1,0 +1,15 @@
+{
+  "Version": "17.0.0",
+  "Name": "YourImageShare",
+  "DestinationType": "ImageUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://yourimageshare.com/api",
+  "Headers": {
+    "X-API-Key": "YOUR_API_KEY"
+  },
+  "Body": "MultipartFormData",
+  "FileFormName": "uploads",
+  "URL": "$json:data.src$",
+  "ThumbnailURL": "$json:data.src$",
+  "ErrorMessage": "$json:errors$"
+}
