@@ -52,12 +52,12 @@ curl, JavaScript, Python, PHP, and Go are in [API.md](API.md).
 
 ## Screenshot tools
 
-Ready-made configs/scripts in [`tools/`](tools/) to upload straight from a
-screenshot tool, no browser tab required:
+Ready-made configs/scripts to upload straight from a screenshot tool, no
+browser tab required:
 
-- [`YourImageShare.sxcu`](tools/YourImageShare.sxcu) - ShareX custom uploader
-- [`yis-flameshot-upload.sh`](tools/yis-flameshot-upload.sh) - Flameshot (Linux)
-- [`yis-greenshot-upload.ps1`](tools/yis-greenshot-upload.ps1) - Greenshot (Windows)
+- [`YourImageShare.sxcu`](YourImageShare.sxcu) - ShareX custom uploader
+- [`yis-flameshot-upload.sh`](yis-flameshot-upload.sh) - Flameshot (Linux)
+- [`yis-greenshot-upload.ps1`](yis-greenshot-upload.ps1) - Greenshot (Windows)
 
 Setup instructions are in the comments at the top of each file, and on the
 [live docs page](https://yourimageshare.com/about/api#screenshot-tools).
