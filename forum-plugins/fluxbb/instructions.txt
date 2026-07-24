@@ -1,0 +1,25 @@
+# YourImageShare Upload for FluxBB
+
+FluxBB doesn't have a formal plugin system, so this is a small snippet
+you add directly to your template - the same approach FluxBB's own
+community documents for header/footer customization.
+
+## Setup
+
+1. Get an API key: sign in at [yourimageshare.com](https://yourimageshare.com),
+   open "My account" > the API tab.
+2. Open `include/template/main.tpl` (or, better, copy it to
+   `style/<your-style>/main.tpl` first so it survives upgrades - FluxBB
+   uses that file if present).
+3. Paste the snippet below right before `</head>`, replacing
+   `YOUR_API_KEY` with your real key.
+4. Save. The "Upload Image (YourImageShare)" button now appears next to
+   every post/reply textarea automatically - no further template changes
+   needed.
+
+```html
+<script>window.YIS_API_KEY = "YOUR_API_KEY";</script>
+<script src="https://yourimageshare.com/assets/js/forum-upload.js"></script>
+```
+
+Full API docs: https://yourimageshare.com/about/api

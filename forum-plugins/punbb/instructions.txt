@@ -1,0 +1,24 @@
+# YourImageShare Upload for PunBB
+
+PunBB doesn't have a formal plugin system either, so - same as FluxBB
+(a close relative of PunBB's codebase) - this is a small snippet added
+directly to your template.
+
+## Setup
+
+1. Get an API key: sign in at [yourimageshare.com](https://yourimageshare.com),
+   open "My account" > the API tab.
+2. Open your active style's `main.tpl` (commonly under
+   `style/<your-style>/` or `include/template/` depending on version).
+3. Find the `{pun_head}` placeholder in the `<head>` section and paste the
+   snippet below right after it, replacing `YOUR_API_KEY` with your real
+   key.
+4. Save. The "Upload Image (YourImageShare)" button now appears next to
+   every post/reply textarea automatically.
+
+```html
+<script>window.YIS_API_KEY = "YOUR_API_KEY";</script>
+<script src="https://yourimageshare.com/assets/js/forum-upload.js"></script>
+```
+
+Full API docs: https://yourimageshare.com/about/api

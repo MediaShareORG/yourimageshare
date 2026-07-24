@@ -1,0 +1,23 @@
+{
+    "name": "yourimageshare/forumupload",
+    "type": "phpbb-extension",
+    "description": "Adds a YourImageShare upload button to the post editor - upload images or video and insert a direct link without leaving the page.",
+    "homepage": "https://yourimageshare.com/about/api",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "YourImageShare",
+            "homepage": "https://yourimageshare.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "extra": {
+        "display-name": "YourImageShare Upload",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.2,<3.4-dev"
+        }
+    }
+}

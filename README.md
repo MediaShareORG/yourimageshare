@@ -90,6 +90,21 @@ browser tab required:
 Setup instructions are in the comments at the top of each file, and on the
 [live docs page](https://yourimageshare.com/about/api#screenshot-tools).
 
+## Forum plugins
+
+A real "Upload Image" button next to your forum's post editor - each one
+uploads through `/api` and inserts BBCode at your cursor:
+
+- [`phpbb/`](forum-plugins/phpbb) - a real phpBB 3.2/3.3 extension ([download](forum-plugins/yourimageshare-phpbb.zip))
+- [`smf/`](forum-plugins/smf) - a real SMF package ([download](forum-plugins/yourimageshare-smf.zip))
+- [`mybb/`](forum-plugins/mybb) - a real MyBB 1.8 plugin ([download](forum-plugins/yourimageshare-mybb.zip))
+- [`fluxbb/`](forum-plugins/fluxbb), [`punbb/`](forum-plugins/punbb), [`zetaboards/`](forum-plugins/zetaboards) - these three don't have a formal plugin system, so it's a small copy-paste snippet into your template/Admin CP instead
+
+All six share one underlying widget, [`forum-upload.js`](forum-plugins/forum-upload.js)
+(also served live from `yourimageshare.com/assets/js/forum-upload.js`), so
+fixes/improvements apply everywhere at once. Full setup instructions and
+downloads are also on the [live docs page](https://yourimageshare.com/about/api#forum-plugins).
+
 ## Rate limits
 
 Each API key gets 20 requests/minute and 500 requests/day by default, plus a

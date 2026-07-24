@@ -1,0 +1,24 @@
+# YourImageShare Upload for ZetaBoards
+
+ZetaBoards is hosted, so there's no file to install - it has a built-in
+Admin CP feature made for exactly this.
+
+## Setup
+
+1. Get an API key: sign in at [yourimageshare.com](https://yourimageshare.com),
+   open "My account" > the API tab.
+2. In your ZetaBoards Admin CP, go to **Themes > Board Template**.
+3. Paste the snippet below into any of the "appears on every theme"
+   placement fields (e.g. the one placed above the copyright, or directly
+   after the navigation menu - any of them work, since the button attaches
+   itself to the page's post editor wherever the script loads). Replace
+   `YOUR_API_KEY` with your real key.
+4. Save. The "Upload Image (YourImageShare)" button now appears next to
+   every post/reply textarea automatically.
+
+```html
+<script>window.YIS_API_KEY = "YOUR_API_KEY";</script>
+<script src="https://yourimageshare.com/assets/js/forum-upload.js"></script>
+```
+
+Full API docs: https://yourimageshare.com/about/api
