@@ -1,0 +1,86 @@
+# yourimageshare-mcp
+
+MCP (Model Context Protocol) server for [YourImageShare](https://yourimageshare.com).
+Lets an MCP-compatible AI agent (Claude Desktop, Claude Code, and other MCP
+clients) upload, list, and delete files on YourImageShare directly - "upload
+this screenshot and give me a link" as a tool call instead of a manual
+copy-paste-upload loop.
+
+- **Get an API key:** sign in and open the **API** tab at
+  [yourimageshare.com/my-account](https://yourimageshare.com/my-account).
+- **Full HTTP reference:** [yourimageshare.com/about/api](https://yourimageshare.com/about/api).
+
+## Install / run
+
+No install needed - run directly with `npx`:
+
+```bash
+npx yourimageshare-mcp
+```
+
+### Claude Desktop / Claude Code config
+
+Add to your MCP client's config (e.g. `claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "yourimageshare": {
+      "command": "npx",
+      "args": ["-y", "yourimageshare-mcp"],
+      "env": {
+        "YIS_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+## Environment variables
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `YIS_API_KEY` | yes | Your YourImageShare API key. |
+| `YIS_BASE_URL` | no | Override the API base URL (default `https://yourimageshare.com/api`). For testing only. |
+
+## Tools
+
+### `upload_image`
+
+Upload a file. Provide **either**:
+- `path` - a local file path this server process can read, or
+- `base64` + `filename` - inline file contents, for MCP clients with no local
+  filesystem access.
+
+Optional `expiresIn` (seconds, 60 to 2,592,000 = 30 days) auto-deletes the
+upload later. Returns the same JSON shape as the HTTP API's upload response
+(`id`, `type`, `path`, `src`, `direct`, `expires_at`).
+
+### `list_uploads`
+
+Optional `page` (defaults to 1, 50 per page). Returns your uploads newest
+first.
+
+### `delete_upload`
+
+Requires `id` (from `upload_image`/`list_uploads`). Permanently deletes the
+upload.
+
+## Notes
+
+- This server only ever acts as the account tied to `YIS_API_KEY` - there's
+  no way for a connected agent to act as any other account.
+- Errors from the API (bad key, rate limit, file rejected by moderation,
+  etc.) come back as a tool error result with the API's own message, not a
+  crashed tool call.
+- Built as a small, self-contained client rather than depending on the
+  separate [`yourimageshare`](https://www.npmjs.com/package/yourimageshare)
+  npm package, so this server's releases aren't coupled to that package's.
+
+## License
+
+MIT
+
+## Support
+
+[yourimageshare.com/contact](https://yourimageshare.com/contact)

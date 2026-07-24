@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yourimageshare"
+version = "1.0.3"
+description = "Official Python SDK for the YourImageShare upload API (https://yourimageshare.com/about/api)."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["requests>=2.25"]
+keywords = ["yourimageshare", "image hosting", "video hosting", "screenshot", "upload", "sdk", "api"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Internet :: WWW/HTTP",
+    "License :: OSI Approved :: MIT License",
+]
+
+[[project.authors]]
+name = "YourImageShare"
+
+[project.urls]
+Homepage = "https://yourimageshare.com/about/api"
+Repository = "https://github.com/MediaShareORG/yourimageshare/tree/main/python"
+Issues = "https://yourimageshare.com/contact"
+
+[tool.setuptools.packages.find]
+where = ["src"]

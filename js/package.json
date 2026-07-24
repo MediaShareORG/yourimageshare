@@ -1,0 +1,48 @@
+{
+  "name": "yourimageshare",
+  "version": "1.0.3",
+  "license": "MIT",
+  "description": "Official JavaScript/TypeScript SDK for the YourImageShare upload API (https://yourimageshare.com/about/api).",
+  "keywords": [
+    "yourimageshare",
+    "image hosting",
+    "video hosting",
+    "screenshot",
+    "upload",
+    "sdk",
+    "api"
+  ],
+  "homepage": "https://yourimageshare.com/about/api",
+  "bugs": "https://yourimageshare.com/contact",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MediaShareORG/yourimageshare.git",
+    "directory": "js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.11.0"
+  }
+}

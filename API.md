@@ -189,10 +189,11 @@ Every error response uses the same shape, regardless of endpoint or cause:
 ## Client libraries
 
 Official SDKs wrap the endpoints below with typed results and raise on API
-errors instead of raw HTTP handling:
+errors instead of raw HTTP handling. Source for all three is in this repo:
 
-- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers.
-- **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+.
+- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
+- **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
+- **MCP server** (for AI agents): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`. Source: [/mcp](mcp).
 
 The raw HTTP examples below still apply for any other language, or if you'd
 rather not add a dependency.
