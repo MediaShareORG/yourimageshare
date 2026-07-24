@@ -2,7 +2,8 @@
 
 A small JSON/REST API for uploading, listing, and deleting files on
 [YourImageShare](https://yourimageshare.com). No SDK required, just an HTTP
-client and an API key.
+client and an API key - official JavaScript and Python SDKs are also
+available, see [Client libraries](#client-libraries) below.
 
 - **Base URL:** `https://yourimageshare.com/api`
 - **Format:** JSON in and out, except uploads which are `multipart/form-data`
@@ -18,6 +19,7 @@ client and an API key.
   - [DELETE /api/{id} - Delete an upload](#delete-apiid---delete-an-upload)
 - [Rate limits](#rate-limits)
 - [Errors](#errors)
+- [Client libraries](#client-libraries)
 - [Code examples](#code-examples)
 
 ## Getting an API key
@@ -54,6 +56,7 @@ Uploads a single file for the authenticated account.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `uploads` | file | yes | The file to upload. One file per request - this endpoint does not batch-upload multiple files. |
+| `expires_in` | integer | no | Auto-delete this upload after this many seconds (60 to 2,592,000, i.e. 1 minute to 30 days). Omit for a normal, permanent upload. |
 
 Accepted types: JPEG, PNG, GIF images; MP4, WebM, AVI video (exact list is
 server-configurable and may expand over time). Max size is
@@ -71,7 +74,8 @@ Response - `200 OK`:
     "type": "image",
     "path": "https://i.yourimageshare.com/aB3xY9qRz1.webp",
     "src": "https://yourimageshare.com/ib/aB3xY9qRz1.webp",
-    "direct": "https://yourimageshare.com/ib/aB3xY9qRz1"
+    "direct": "https://yourimageshare.com/ib/aB3xY9qRz1",
+    "expires_at": null
   }
 }
 ```
@@ -83,6 +87,13 @@ Response - `200 OK`:
 | `path` | The raw storage URL of the uploaded file. |
 | `src` | Direct file URL - opens the file itself, suitable for an `<img>`/`<video>` `src`. |
 | `direct` | The file's page on YourImageShare (title, description, comments, share options). |
+| `expires_at` | ISO 8601 timestamp this upload will be auto-deleted at, or `null` if it doesn't expire. |
+
+**Expiring uploads:** once `expires_at` passes, the file is deleted from
+storage and the upload's page starts returning `410 Gone` within about 5
+minutes. This can't be undone or extended after the fact - delete early
+with the DELETE endpoint if you need to remove it sooner, or re-upload
+with a new `expires_in` if you need it to last longer.
 
 ### GET /api - List your uploads
 
@@ -106,6 +117,7 @@ Response - `200 OK`:
       "path": "https://i.yourimageshare.com/aB3xY9qRz1.webp",
       "src": "https://yourimageshare.com/ib/aB3xY9qRz1.webp",
       "direct": "https://yourimageshare.com/ib/aB3xY9qRz1",
+      "expires_at": null,
       "created_at": "2026-07-23T15:43:28+01:00"
     }
   ],
@@ -113,9 +125,10 @@ Response - `200 OK`:
 }
 ```
 
-`path`, `src`, and `direct` mean the same thing here as they do on the
-upload response above. There's no single "get one upload" endpoint yet, so
-this list is also the way to look up a file's `id` after the fact.
+`path`, `src`, `direct`, and `expires_at` mean the same thing here as they
+do on the upload response above. There's no single "get one upload"
+endpoint yet, so this list is also the way to look up a file's `id` after
+the fact.
 
 ### DELETE /api/{id} - Delete an upload
 
@@ -173,6 +186,17 @@ Every error response uses the same shape, regardless of endpoint or cause:
 | 429 | Rate limit exceeded - see [Rate limits](#rate-limits) above. |
 | 500 | Something failed unexpectedly server-side. Safe to retry. |
 
+## Client libraries
+
+Official SDKs wrap the endpoints below with typed results and raise on API
+errors instead of raw HTTP handling:
+
+- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers.
+- **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+.
+
+The raw HTTP examples below still apply for any other language, or if you'd
+rather not add a dependency.
+
 ## Code examples
 
 ### curl
@@ -181,6 +205,11 @@ Every error response uses the same shape, regardless of endpoint or cause:
 # Upload a file
 curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
   -F "uploads=@/path/to/photo.jpg"
+
+# Upload a file that auto-deletes after 1 hour
+curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+  -F "uploads=@/path/to/photo.jpg" \
+  -F "expires_in=3600"
 
 # List uploads
 curl "https://yourimageshare.com/api?key=YOUR_API_KEY"

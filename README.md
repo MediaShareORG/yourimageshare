@@ -50,6 +50,31 @@ curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
 Full request/response shapes, rate limits, error codes, and code samples in
 curl, JavaScript, Python, PHP, and Go are in [API.md](API.md).
 
+## Client libraries
+
+Official SDKs, so you don't have to hand-roll the HTTP calls:
+
+- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers.
+- **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+.
+
+Both wrap the same three endpoints below (`upload`/`list`/`delete`) with typed
+results and a proper exception on API errors instead of raw HTTP handling.
+
+No official library for your language? The [full HTTP reference](API.md)
+covers everything needed to call the API directly.
+
+## Expiring uploads
+
+Pass `expires_in` (seconds, 60 to 2,592,000) on upload to auto-delete a
+file later - the storage object is removed and the page starts 410ing
+within about 5 minutes of expiry. Omit it for a normal, permanent upload.
+
+```bash
+curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+  -F "uploads=@/path/to/photo.jpg" \
+  -F "expires_in=3600"
+```
+
 ## Screenshot tools
 
 Ready-made configs/scripts to upload straight from a screenshot tool, no

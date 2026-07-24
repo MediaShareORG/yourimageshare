@@ -53,6 +53,13 @@
 							"type": "file",
 							"src": [],
 							"description": "The image or video file to upload. Field name must be exactly \"uploads\"."
+						},
+						{
+							"key": "expires_in",
+							"value": "",
+							"type": "text",
+							"disabled": true,
+							"description": "Optional. Auto-delete after this many seconds (60 to 2592000, i.e. 1 minute to 30 days). Enable this field and set a value to test expiring uploads."
 						}
 					]
 				},
@@ -61,7 +68,7 @@
 					"host": [ "{{base_url}}" ],
 					"path": [ "api" ]
 				},
-				"description": "Uploads a single image or video. On success, returns the direct URL, page URL, and an id you can use with List/Delete.\n\nResponses:\n- 200: `{ \"type\": \"success\", \"data\": { \"id\", \"type\", \"path\", \"src\", \"direct\" } }`\n- 401: missing/invalid API key\n- 403: account or IP is banned\n- 422: missing file, unsupported/invalid file, or file previously flagged by moderation\n- 500: upload/server error"
+				"description": "Uploads a single image or video. On success, returns the direct URL, page URL, and an id you can use with List/Delete.\n\nResponses:\n- 200: `{ \"type\": \"success\", \"data\": { \"id\", \"type\", \"path\", \"src\", \"direct\", \"expires_at\" } }`\n- 401: missing/invalid API key\n- 403: account or IP is banned\n- 422: missing file, unsupported/invalid file, file previously flagged by moderation, or an out-of-range `expires_in`\n- 500: upload/server error"
 			}
 		},
 		{
@@ -95,7 +102,7 @@
 						{ "key": "page", "value": "1", "description": "Optional. Paginated 50 per page, newest first." }
 					]
 				},
-				"description": "Lists the authenticated account's own uploads, newest first, 50 per page.\n\nResponses:\n- 200: `{ \"type\": \"success\", \"data\": [ { \"id\", \"type\", \"title\", \"path\", \"src\", \"direct\", \"created_at\" }, ... ], \"meta\": { \"current_page\", \"last_page\", \"total\" } }`\n- 401: missing/invalid API key"
+				"description": "Lists the authenticated account's own uploads, newest first, 50 per page.\n\nResponses:\n- 200: `{ \"type\": \"success\", \"data\": [ { \"id\", \"type\", \"title\", \"path\", \"src\", \"direct\", \"expires_at\", \"created_at\" }, ... ], \"meta\": { \"current_page\", \"last_page\", \"total\" } }`\n- 401: missing/invalid API key"
 			}
 		},
 		{
