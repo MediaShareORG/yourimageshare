@@ -1,0 +1,294 @@
+openapi: 3.0.3
+info:
+  title: YourImageShare API
+  description: >
+    Free JSON/REST API for YourImageShare - upload, list, and delete
+    images/videos programmatically. See https://yourimageshare.com/about/api
+    for the human-readable docs and API.md in this repo for the full
+    reference.
+  version: "1.0"
+  contact:
+    name: YourImageShare
+    url: https://yourimageshare.com/contact
+  license:
+    name: MIT
+    url: https://github.com/MediaShareORG/yourimageshare/blob/main/LICENSE
+servers:
+  - url: https://yourimageshare.com/api
+    description: Production
+
+security:
+  - apiKeyQuery: []
+  - apiKeyHeader: []
+
+paths:
+  /:
+    post:
+      operationId: uploadFile
+      summary: Upload a file
+      description: Uploads a single file for the authenticated account. One file per request.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [uploads]
+              properties:
+                uploads:
+                  type: string
+                  format: binary
+                  description: The file to upload (image or video).
+                expires_in:
+                  type: integer
+                  minimum: 60
+                  maximum: 2592000
+                  description: >
+                    Auto-delete this upload after this many seconds (60 to
+                    2,592,000, i.e. 1 minute to 30 days). Omit for a
+                    permanent upload.
+      responses:
+        '200':
+          description: Upload succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+              example:
+                type: success
+                msg: success
+                data:
+                  id: aB3xY9qRz1
+                  type: image
+                  path: https://i.yourimageshare.com/aB3xY9qRz1.webp
+                  src: https://yourimageshare.com/ib/aB3xY9qRz1.webp
+                  direct: https://yourimageshare.com/ib/aB3xY9qRz1
+                  expires_at: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    get:
+      operationId: listUploads
+      summary: List your uploads
+      description: >
+        Returns a paginated list of the authenticated account's uploads
+        (from any source), newest first, 50 per page.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number, defaults to 1.
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        '200':
+          description: List of uploads.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /{id}:
+    delete:
+      operationId: deleteUpload
+      summary: Delete an upload
+      description: >
+        Permanently deletes one of the authenticated account's uploads.
+        Cannot be undone from the API.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The upload's id, as returned by the upload or list endpoints.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+              example:
+                type: success
+                msg: Deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  securitySchemes:
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: key
+    apiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    Upload:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The file's unique identifier.
+          example: aB3xY9qRz1
+        type:
+          type: string
+          enum: [image, video]
+        title:
+          type: string
+          nullable: true
+        path:
+          type: string
+          format: uri
+          description: The raw storage URL of the uploaded file.
+        src:
+          type: string
+          format: uri
+          description: Direct file URL, suitable for an <img>/<video> src.
+        direct:
+          type: string
+          format: uri
+          description: The file's page on YourImageShare.
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: ISO 8601 timestamp this upload auto-deletes at, or null.
+        created_at:
+          type: string
+          format: date-time
+          description: Only present on list responses.
+      required: [id, type, path, src, direct]
+
+    UploadResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [success]
+        msg:
+          type: string
+        data:
+          $ref: '#/components/schemas/Upload'
+      required: [type, data]
+
+    ListResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [success]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Upload'
+        meta:
+          type: object
+          properties:
+            current_page:
+              type: integer
+            last_page:
+              type: integer
+            total:
+              type: integer
+      required: [type, data, meta]
+
+    SuccessMessage:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [success]
+        msg:
+          type: string
+      required: [type, msg]
+
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [error]
+        errors:
+          type: string
+          description: Human-readable description of what went wrong.
+      required: [type, errors]
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: error
+            errors: Missing or invalid API key.
+    Forbidden:
+      description: The account or your current IP has been banned from uploading.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: No matching upload found for that id on this account.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: >
+        No file provided, an unsupported file type, unreadable image data,
+        or dimensions over the 30000x30000px limit.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimited:
+      description: Rate limit exceeded.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: error
+            errors: Rate limit exceeded.
+    ServerError:
+      description: Something failed unexpectedly server-side. Safe to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
