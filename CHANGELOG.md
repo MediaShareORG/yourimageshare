@@ -11,6 +11,9 @@ a whole rather than duplicating per-package release notes.
 
 ## [Unreleased]
 
+- Added `CODE_OF_CONDUCT.md`, issue templates (bug report, feature request),
+  and a pull request template, rounding out GitHub's community standards
+  checklist.
 - Added `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, this changelog, an
   `openapi.yaml` spec, and a CI workflow that builds the JS/TS and MCP
   packages and sanity-checks the Python package on every push/PR.
