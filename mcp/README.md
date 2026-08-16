@@ -1,5 +1,7 @@
 # yourimageshare-mcp
 
+[![smithery badge](https://smithery.ai/badge/team-54m5/yourimageshare)](https://smithery.ai/servers/team-54m5/yourimageshare)
+
 MCP (Model Context Protocol) server for [YourImageShare](https://yourimageshare.com).
 Lets an MCP-compatible AI agent (Claude Desktop, Claude Code, and other MCP
 clients) upload, list, and delete files on YourImageShare directly - "upload
@@ -17,6 +19,8 @@ No install needed - run directly with `npx`:
 ```bash
 npx yourimageshare-mcp
 ```
+
+Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare), if your MCP client installs from there instead.
 
 ### Claude Desktop / Claude Code config
 
