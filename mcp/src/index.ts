@@ -17,7 +17,7 @@ const client = new YourImageShareClient(apiKey, process.env.YIS_BASE_URL ?? DEFA
 
 const server = new McpServer({
   name: 'yourimageshare',
-  version: '1.0.2',
+  version: '1.0.4',
 });
 
 function errorResult(err: unknown) {

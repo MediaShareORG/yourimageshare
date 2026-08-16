@@ -6,11 +6,19 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Each SDK also has its own version, tracked in its `package.json`/
 `pyproject.toml` (currently `yourimageshare` JS SDK 1.0.3, `yourimageshare`
-Python SDK 1.0.3, `yourimageshare-mcp` 1.0.2) - this log covers the repo as
+Python SDK 1.0.3, `yourimageshare-mcp` 1.0.4) - this log covers the repo as
 a whole rather than duplicating per-package release notes.
 
 ## [Unreleased]
 
+- `yourimageshare-mcp` 1.0.4: added `mcpName` (`io.github.MediaShareORG/yourimageshare`
+  - note the exact GitHub org casing; the registry's namespace check is
+  case-sensitive, unlike GitHub login itself, so 1.0.3 shipped with a
+  lowercased value that the registry rejected) to `package.json` and
+  published `mcp/server.json`, to list the server on the official MCP
+  Registry (registry.modelcontextprotocol.io). Also added `mcp/glama.json`
+  and `mcp/manifest.json` (MCPB bundle manifest, used to publish to
+  Smithery) in prior unreleased work.
 - Added `CODE_OF_CONDUCT.md`, issue templates (bug report, feature request),
   and a pull request template, rounding out GitHub's community standards
   checklist.

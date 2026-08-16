@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.MediaShareORG/yourimageshare",
+  "description": "MCP server exposing the YourImageShare upload API (upload/list/delete) as tools for AI agents.",
+  "repository": {
+    "url": "https://github.com/MediaShareORG/yourimageshare",
+    "source": "github",
+    "subfolder": "mcp"
+  },
+  "version": "1.0.4",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "yourimageshare-mcp",
+      "version": "1.0.4",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Your YourImageShare API key. Get one at yourimageshare.com/my-account under the API tab.",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": true,
+          "name": "YIS_API_KEY"
+        }
+      ]
+    }
+  ]
+}
