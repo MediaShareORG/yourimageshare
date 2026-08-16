@@ -8,17 +8,21 @@ import { DEFAULT_BASE_URL, YourImageShareApiError, YourImageShareClient } from '
 
 const apiKey = process.env.YIS_API_KEY;
 if (!apiKey) {
-  console.error('yourimageshare-mcp: YIS_API_KEY environment variable is required.');
-  console.error('Get a key from the "API" tab at https://yourimageshare.com/my-account');
-  process.exit(1);
+  // Deliberately not fatal: tool schemas (name, description, input/output
+  // shape) must stay introspectable without credentials - clients and
+  // registry scanners call tools/list before any key is available. Actual
+  // calls fail cleanly through the normal API-error path in client.ts
+  // instead (a 401 from the real API), not a process crash.
+  console.error('yourimageshare-mcp: YIS_API_KEY environment variable is not set.');
+  console.error('Tool calls will fail until it is. Get a key from the "API" tab at https://yourimageshare.com/my-account');
 }
 
-const client = new YourImageShareClient(apiKey, process.env.YIS_BASE_URL ?? DEFAULT_BASE_URL);
+const client = new YourImageShareClient(apiKey ?? '', process.env.YIS_BASE_URL ?? DEFAULT_BASE_URL);
 
 const server = new McpServer({
   name: 'yourimageshare',
   title: 'YourImageShare',
-  version: '1.0.5',
+  version: '1.0.6',
   description:
     'Upload, list, and delete images and videos on YourImageShare (free hosting, 200MB limit, no account required for end viewers) and get back a shareable link.',
   websiteUrl: 'https://yourimageshare.com',

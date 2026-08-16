@@ -6,11 +6,24 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Each SDK also has its own version, tracked in its `package.json`/
 `pyproject.toml` (currently `yourimageshare` JS SDK 1.0.3, `yourimageshare`
-Python SDK 1.0.3, `yourimageshare-mcp` 1.0.5) - this log covers the repo as
+Python SDK 1.0.3, `yourimageshare-mcp` 1.0.6) - this log covers the repo as
 a whole rather than duplicating per-package release notes.
 
 ## [Unreleased]
 
+- `yourimageshare-mcp` 1.0.6: fixed the actual cause of Smithery's 45/100
+  quality score. `src/index.ts` was calling `process.exit(1)` if
+  `YIS_API_KEY` wasn't set, *before* the server or any tool got
+  registered - Smithery's quality scanner has no real credentials to
+  give it, so the process almost certainly crashed before it could ever
+  see the rich tool definitions added in 1.0.5, explaining a 0/40
+  Capability Quality score despite Server Metadata scoring a clean
+  35/35. Made the missing-key check non-fatal: tools now register and
+  `tools/list` succeeds with zero credentials (verified directly, not
+  assumed - spawned the built server with no `YIS_API_KEY` and confirmed
+  all 3 tools list successfully); actual tool calls still fail cleanly
+  through the existing API-error path (a 401 from the real API) if no
+  valid key is set, same as before.
 - `yourimageshare-mcp` 1.0.5: richer tool definitions to raise Smithery's
   quality score (was 45/100) - added MCP `annotations` (readOnlyHint /
   destructiveHint / idempotentHint / openWorldHint) and `outputSchema` to
