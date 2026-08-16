@@ -17,7 +17,11 @@ const client = new YourImageShareClient(apiKey, process.env.YIS_BASE_URL ?? DEFA
 
 const server = new McpServer({
   name: 'yourimageshare',
-  version: '1.0.4',
+  title: 'YourImageShare',
+  version: '1.0.5',
+  description:
+    'Upload, list, and delete images and videos on YourImageShare (free hosting, 200MB limit, no account required for end viewers) and get back a shareable link.',
+  websiteUrl: 'https://yourimageshare.com',
 });
 
 function errorResult(err: unknown) {
@@ -25,14 +29,34 @@ function errorResult(err: unknown) {
   return { content: [{ type: 'text' as const, text: `Error: ${message}` }], isError: true };
 }
 
+// Shared field descriptions for the link object returned by upload_image and
+// present in each list_uploads row - kept as one definition so the two tools
+// stay consistent instead of drifting.
+const uploadFields = {
+  id: z.string().describe('Unique identifier for this upload. Pass to delete_upload to remove it.'),
+  type: z.enum(['image', 'video']),
+  path: z.string().describe('Raw storage URL - the literal file, e.g. i.yourimageshare.com/xxx.webp.'),
+  src: z.string().describe('Direct/embeddable file URL - use this for <img>/<video> src attributes.'),
+  direct: z
+    .string()
+    .describe(
+      'The shareable page URL (title, description, comments, share buttons). Despite the field name, this is NOT a direct file link - use `src` for that.',
+    ),
+  expires_at: z.string().nullable().describe('ISO 8601 auto-delete timestamp, or null if the upload never expires.'),
+};
+
 server.registerTool(
   'upload_image',
   {
     title: 'Upload an image or video',
     description:
-      'Upload an image or video to YourImageShare and get back a shareable link. ' +
-      'Provide either `path` (a local file path readable by this server) or ' +
-      '`base64` + `filename` (for clients with no local filesystem access), not both.',
+      'Upload an image or video to YourImageShare and get back a shareable link. Accepts JPG, PNG, GIF, WEBP, ' +
+      'AVIF, BMP, TIFF, HEIC/HEIF images and MP4, WEBM, AVI video, 100KB-200MB. Provide `path` for a file on ' +
+      'disk this server can read, or `base64` + `filename` for in-memory content (e.g. no local filesystem ' +
+      'access) - never both. Returns three different URLs for the same upload (see output fields): a raw ' +
+      "storage link, a direct embeddable link, and a shareable page link - pick whichever fits where it's " +
+      'going. Errors (oversized/unsupported file, bad API key, rate limit) come back as a normal tool error, ' +
+      'not a thrown exception.',
     inputSchema: {
       path: z.string().optional().describe('Local file path to upload.'),
       base64: z.string().optional().describe('Base64-encoded file contents. Requires `filename`.'),
@@ -44,6 +68,14 @@ server.registerTool(
         .max(2592000)
         .optional()
         .describe('Auto-delete after this many seconds (60 to 2,592,000 = 30 days). Omit for a permanent upload.'),
+    },
+    outputSchema: uploadFields,
+    annotations: {
+      title: 'Upload an image or video',
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
+      openWorldHint: true,
     },
   },
   async ({ path, base64, filename, expiresIn }) => {
@@ -75,6 +107,7 @@ server.registerTool(
             text: JSON.stringify(result, null, 2),
           },
         ],
+        structuredContent: { ...result },
       };
     } catch (err) {
       return errorResult(err);
@@ -86,15 +119,40 @@ server.registerTool(
   'list_uploads',
   {
     title: 'List your uploads',
-    description: 'List your YourImageShare uploads, newest first. 50 per page.',
+    description:
+      "List your YourImageShare uploads, newest first, 50 per page - use this to find an upload's `id` (needed " +
+      "by `delete_upload`) when you only have its URL or remember it by content, since there's no lookup-by-URL " +
+      'endpoint. Each result includes the same three link fields `upload_image` returns, plus `title` and ' +
+      '`created_at`. An out-of-range page number returns an empty `data` array, not an error.',
     inputSchema: {
       page: z.number().int().min(1).optional().describe('Page number. Defaults to 1.'),
+    },
+    outputSchema: {
+      data: z.array(
+        z.object({
+          ...uploadFields,
+          title: z.string().nullable().describe('User-set title, or null if never set.'),
+          created_at: z.string().describe('ISO 8601 upload timestamp.'),
+        }),
+      ),
+      meta: z.object({
+        current_page: z.number(),
+        last_page: z.number(),
+        total: z.number().describe('Total uploads across all pages, not just this one.'),
+      }),
+    },
+    annotations: {
+      title: 'List your uploads',
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
     },
   },
   async ({ page }) => {
     try {
       const result = await client.list(page ?? 1);
-      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
+      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }], structuredContent: { ...result } };
     } catch (err) {
       return errorResult(err);
     }
@@ -105,15 +163,33 @@ server.registerTool(
   'delete_upload',
   {
     title: 'Delete an upload',
-    description: 'Permanently delete one of your YourImageShare uploads by id.',
+    description:
+      "Permanently delete one of your YourImageShare uploads by `id` - irreversible, the file and its links " +
+      "stop working immediately. Get the `id` from upload_image's response right after uploading, or from " +
+      'list_uploads if you no longer have it. Errors (not found, already deleted, wrong owner) come back as a ' +
+      'normal tool error.',
     inputSchema: {
       id: z.string().describe('The upload id to delete (the `id` field returned by upload_image/list_uploads).'),
+    },
+    outputSchema: {
+      deleted: z.literal(true),
+      id: z.string(),
+    },
+    annotations: {
+      title: 'Delete an upload',
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: true,
+      openWorldHint: true,
     },
   },
   async ({ id }) => {
     try {
       await client.delete(id);
-      return { content: [{ type: 'text' as const, text: `Deleted ${id}.` }] };
+      return {
+        content: [{ type: 'text' as const, text: `Deleted ${id}.` }],
+        structuredContent: { deleted: true as const, id },
+      };
     } catch (err) {
       return errorResult(err);
     }

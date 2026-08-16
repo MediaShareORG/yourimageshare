@@ -6,11 +6,23 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Each SDK also has its own version, tracked in its `package.json`/
 `pyproject.toml` (currently `yourimageshare` JS SDK 1.0.3, `yourimageshare`
-Python SDK 1.0.3, `yourimageshare-mcp` 1.0.4) - this log covers the repo as
+Python SDK 1.0.3, `yourimageshare-mcp` 1.0.5) - this log covers the repo as
 a whole rather than duplicating per-package release notes.
 
 ## [Unreleased]
 
+- `yourimageshare-mcp` 1.0.5: richer tool definitions to raise Smithery's
+  quality score (was 45/100) - added MCP `annotations` (readOnlyHint /
+  destructiveHint / idempotentHint / openWorldHint) and `outputSchema` to
+  all 3 tools, server-level `title`/`description`/`websiteUrl`, and
+  rewrote all 3 descriptions against Smithery's published Tool Definition
+  Quality Score rubric (purpose clarity, usage guidelines, behavioral
+  transparency, parameter semantics, conciseness, contextual
+  completeness) - including documenting a real gotcha in the upload
+  response shape (the `direct` field is actually the shareable *page*
+  URL, not a direct file link; `src` is). Verified via a real MCP client
+  connection (`tools/list`) that the schemas are well-formed before
+  publishing, not just that it compiles.
 - `yourimageshare-mcp` 1.0.4: added `mcpName` (`io.github.MediaShareORG/yourimageshare`
   - note the exact GitHub org casing; the registry's namespace check is
   case-sensitive, unlike GitHub login itself, so 1.0.3 shipped with a
