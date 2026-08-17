@@ -12,6 +12,8 @@ step. Works the same way with Claude Desktop and any other MCP client.
 - **Get an API key:** sign in and open the **API** tab at
   [yourimageshare.com/my-account](https://yourimageshare.com/my-account).
 - **Full HTTP reference:** [yourimageshare.com/about/api](https://yourimageshare.com/about/api).
+- **OpenAPI 3.1 spec:** [yourimageshare.com/openapi.json](https://yourimageshare.com/openapi.json),
+  if your tooling prefers that to this README.
 
 ## Install / run
 
