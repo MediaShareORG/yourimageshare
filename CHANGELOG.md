@@ -6,11 +6,29 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Each SDK also has its own version, tracked in its `package.json`/
 `pyproject.toml` (currently `yourimageshare` JS SDK 1.0.3, `yourimageshare`
-Python SDK 1.0.3, `yourimageshare-mcp` 1.0.6) - this log covers the repo as
-a whole rather than duplicating per-package release notes.
+Python SDK 1.0.3, `yourimageshare-mcp` 1.0.6, `yourimageshare-discord-bot`
+0.1.0) - this log covers the repo as a whole rather than duplicating
+per-package release notes.
 
 ## [Unreleased]
 
+- Added `discord/` - a Discord bot (`/upload file:<attachment>
+  [expires_in_days]`) wrapping the existing public API + JS SDK. v1 uploads
+  under a single shared account (the bot's own API key), same model most
+  paste-an-image-get-a-link Discord bots use; per-user linked accounts
+  would need real Discord OAuth, noted as a real v2 rather than built here.
+  Compiles clean under strict TypeScript; smoke-tested the upload/error
+  path against the real live API with a deliberately bad key (confirmed
+  the exact `401` error shape comes back correctly through the SDK). The
+  Discord-specific half (slash command registration, interaction handling)
+  still needs a real bot token to test end-to-end.
+- Published `https://yourimageshare.com/openapi.json` - a real OpenAPI 3.1
+  spec built from the actual `UploadController.php` source (not just the
+  JS SDK's types), validated against the OpenAPI 3.1 JSON Schema. Linked
+  from `/about/api` and the MCP README.
+- Repositioned the MCP server's pitch from generic "for AI agents" to the
+  concrete bug-report/PR-screenshot use case, on both `/about/api` and
+  `mcp/README.md`.
 - `yourimageshare-mcp` 1.0.6: fixed the actual cause of Smithery's 45/100
   quality score. `src/index.ts` was calling `process.exit(1)` if
   `YIS_API_KEY` wasn't set, *before* the server or any tool got
