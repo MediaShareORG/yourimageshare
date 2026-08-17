@@ -1,5 +1,9 @@
 # yourimageshare
 
+[![PyPI version](https://img.shields.io/pypi/v/yourimageshare.svg)](https://pypi.org/project/yourimageshare/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/yourimageshare.svg)](https://pypi.org/project/yourimageshare/)
+[![license](https://img.shields.io/pypi/l/yourimageshare.svg)](https://github.com/MediaShareORG/yourimageshare/blob/main/python/LICENSE)
+
 Official Python SDK for the [YourImageShare](https://yourimageshare.com)
 upload API. One dependency (`requests`), Python 3.8+.
 

@@ -1,5 +1,7 @@
 # yourimageshare-mcp
 
+[![npm version](https://img.shields.io/npm/v/yourimageshare-mcp.svg)](https://www.npmjs.com/package/yourimageshare-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/yourimageshare-mcp.svg)](https://www.npmjs.com/package/yourimageshare-mcp)
 [![smithery badge](https://smithery.ai/badge/team-54m5/yourimageshare)](https://smithery.ai/servers/team-54m5/yourimageshare)
 [![yourimageshare MCP server](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare/badges/card.svg)](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare)
 
