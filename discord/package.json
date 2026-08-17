@@ -1,0 +1,39 @@
+{
+  "name": "yourimageshare-discord-bot",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Discord bot: /upload a file, get back a YourImageShare link.",
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "yourimageshare",
+    "image hosting",
+    "upload"
+  ],
+  "homepage": "https://yourimageshare.com/about/api",
+  "bugs": "https://yourimageshare.com/contact",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MediaShareORG/yourimageshare.git",
+    "directory": "discord"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "register-commands": "node dist/register-commands.js",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.0",
+    "yourimageshare": "^1.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.11.0"
+  }
+}
