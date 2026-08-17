@@ -55,16 +55,17 @@ curl, JavaScript, Python, PHP, and Go are in [API.md](API.md).
 
 ## Client libraries
 
-Official SDKs, so you don't have to hand-roll the HTTP calls - source for all
-three lives in this repo:
+Three official SDKs, so you don't have to hand-roll the HTTP calls, plus a
+Discord bot built on top of one of them - source for all four lives in this
+repo:
 
 - **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
 - **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
 - **MCP server** (for AI coding agents - Claude Code, Cursor, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
-- **Discord bot**: `/upload file:<attachment>` slash command. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
+- **Discord bot**: `/upload file:<attachment>` slash command, built on the JS SDK. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
 
-All three wrap the same three endpoints below (`upload`/`list`/`delete`) with
-typed results and a proper exception on API errors instead of raw HTTP
+The three SDKs wrap the same three endpoints below (`upload`/`list`/`delete`)
+with typed results and a proper exception on API errors instead of raw HTTP
 handling, and are MIT licensed.
 
 No official library for your language? The [full HTTP reference](API.md)
