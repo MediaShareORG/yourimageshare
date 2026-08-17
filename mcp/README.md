@@ -1,6 +1,7 @@
 # yourimageshare-mcp
 
 [![smithery badge](https://smithery.ai/badge/team-54m5/yourimageshare)](https://smithery.ai/servers/team-54m5/yourimageshare)
+[![yourimageshare MCP server](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare/badges/card.svg)](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare)
 
 MCP (Model Context Protocol) server for [YourImageShare](https://yourimageshare.com).
 Lets an MCP-compatible AI agent (Claude Desktop, Claude Code, and other MCP

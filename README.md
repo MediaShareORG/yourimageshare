@@ -1,6 +1,7 @@
 # YourImageShare API
 
 [![smithery badge](https://smithery.ai/badge/team-54m5/yourimageshare)](https://smithery.ai/servers/team-54m5/yourimageshare)
+[![yourimageshare MCP server](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare/badges/card.svg)](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare)
 
 Free JSON/REST API for [YourImageShare](https://yourimageshare.com) - a free
 image and video hosting platform for anonymous and registered users. Use the
@@ -59,7 +60,7 @@ three lives in this repo:
 
 - **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
 - **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
-- **MCP server** (for AI agents - Claude Desktop, Claude Code, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare). Source: [/mcp](mcp).
+- **MCP server** (for AI agents - Claude Desktop, Claude Code, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
 
 All three wrap the same three endpoints below (`upload`/`list`/`delete`) with
 typed results and a proper exception on API errors instead of raw HTTP
