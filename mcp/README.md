@@ -4,10 +4,10 @@
 [![yourimageshare MCP server](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare/badges/card.svg)](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare)
 
 MCP (Model Context Protocol) server for [YourImageShare](https://yourimageshare.com).
-Lets an MCP-compatible AI agent (Claude Desktop, Claude Code, and other MCP
-clients) upload, list, and delete files on YourImageShare directly - "upload
-this screenshot and give me a link" as a tool call instead of a manual
-copy-paste-upload loop.
+Built for AI coding agents (Claude Code, Cursor, and other MCP-compatible
+tools) - paste a screenshot into a bug report, a PR description, or a
+support thread as a real URL instead of a base64 blob or a manual upload
+step. Works the same way with Claude Desktop and any other MCP client.
 
 - **Get an API key:** sign in and open the **API** tab at
   [yourimageshare.com/my-account](https://yourimageshare.com/my-account).
