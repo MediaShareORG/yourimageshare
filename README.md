@@ -60,7 +60,8 @@ three lives in this repo:
 
 - **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
 - **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
-- **MCP server** (for AI agents - Claude Desktop, Claude Code, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
+- **MCP server** (for AI coding agents - Claude Code, Cursor, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
+- **Discord bot**: `/upload file:<attachment>` slash command. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
 
 All three wrap the same three endpoints below (`upload`/`list`/`delete`) with
 typed results and a proper exception on API errors instead of raw HTTP
