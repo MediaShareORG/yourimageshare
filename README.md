@@ -9,7 +9,7 @@ API to upload, list, and delete files programmatically instead of going
 through the browser uploader.
 
 - **Base URL:** `https://yourimageshare.com/api`
-- **Auth:** an API key, sent as `?key=` or an `X-API-Key` header
+- **Auth:** an API key, sent as an `X-API-Key` header (preferred) or `?key=` fallback
 - **Format:** JSON in and out, except uploads which are `multipart/form-data`
 - **Full reference:** [API.md](API.md)
 - **Live docs:** [yourimageshare.com/about/api](https://yourimageshare.com/about/api)
@@ -31,7 +31,8 @@ use it.
 ## Quick example
 
 ```bash
-curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+curl "https://yourimageshare.com/api" \
+  -H "X-API-Key: YOUR_API_KEY" \
   -F "uploads=@/path/to/photo.jpg"
 ```
 
@@ -85,7 +86,8 @@ file later - the storage object is removed and the page starts 410ing
 within about 5 minutes of expiry. Omit it for a normal, permanent upload.
 
 ```bash
-curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+curl "https://yourimageshare.com/api" \
+  -H "X-API-Key: YOUR_API_KEY" \
   -F "uploads=@/path/to/photo.jpg" \
   -F "expires_in=3600"
 ```

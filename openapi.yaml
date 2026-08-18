@@ -18,8 +18,8 @@ servers:
     description: Production
 
 security:
-  - apiKeyQuery: []
   - apiKeyHeader: []
+  - apiKeyQuery: []
 
 paths:
   /:
@@ -152,16 +152,18 @@ components:
         can only upload - list/delete reject it with 401. Use the
         upload-only key anywhere the value ends up visible to others (e.g.
         embedded in a page), and the full key only in trusted server-side
-        code. If both this and the header are present, this query
-        parameter wins.
+        code. Kept as a fallback for older integrations; prefer the
+        X-API-Key header below where you can. If both are present, the
+        header wins.
     apiKeyHeader:
       type: apiKey
       in: header
       name: X-API-Key
       description: >
         Same as the `key` query parameter above (full key or upload-only
-        key); prefer this header over the query parameter where you can,
-        since query strings tend to end up in access/proxy logs.
+        key). Preferred over the query parameter, since query strings tend
+        to end up in access/proxy logs and Referer headers. If both are
+        present, this header wins.
 
   schemas:
     Upload:

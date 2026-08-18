@@ -12,6 +12,16 @@ per-package release notes.
 
 ## [Unreleased]
 
+- **The `X-API-Key` header now takes precedence over `?key=`** when both
+  are present (previously the query parameter won). `?key=` still works
+  as a fallback for older integrations - this only changes which one is
+  used if a caller sends both. Updated all code examples in `API.md`,
+  `README.md`, the live `/about/api` docs page, `openapi.yaml`/
+  `openapi.json`, and the Postman collection description to lead with the
+  header, since query strings tend to end up in access/proxy logs and
+  `Referer` headers in ways headers generally don't. No SDK changes needed
+  - the JS/Python SDKs, MCP server, Discord bot, ShareX config, and
+  Flameshot/Greenshot scripts already sent the header exclusively.
 - **New: scoped Upload-only key**, alongside the existing full API key, both
   managed from the API tab on `/my-account`. The full key still does
   upload+list+delete; the new upload-only key can only upload -

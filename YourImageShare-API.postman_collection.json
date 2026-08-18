@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "YourImageShare API",
-		"description": "Free API to upload, list, and delete images and videos on YourImageShare.\n\nDocs: https://yourimageshare.com/about/api\n\nAuthentication: every request needs your account's API key, found on the API tab of https://yourimageshare.com/my-account. This collection sends it as an `X-API-Key` header (collection-level auth). It can alternatively be passed as a `?key=` query parameter instead - the API checks the query parameter first, then the header.\n\nBefore running: set the `api_key` collection variable to your real key. The Upload request auto-saves the returned upload id into `upload_id` so List/Delete can be run right after it with no manual copy-paste.",
+		"description": "Free API to upload, list, and delete images and videos on YourImageShare.\n\nDocs: https://yourimageshare.com/about/api\n\nAuthentication: every request needs your account's API key, found on the API tab of https://yourimageshare.com/my-account. This collection sends it as an `X-API-Key` header (collection-level auth) - the preferred method, since query strings tend to end up in logs. It can alternatively be passed as a `?key=` query parameter instead, kept for compatibility - if both are present, the header wins.\n\nBefore running: set the `api_key` collection variable to your real key. The Upload request auto-saves the returned upload id into `upload_id` so List/Delete can be run right after it with no manual copy-paste.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"auth": {

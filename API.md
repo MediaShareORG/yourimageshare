@@ -36,16 +36,21 @@ forum plugin or other place that renders in page source.
 
 ## Authentication
 
-Send your key one of two ways. If both are present, the query parameter
-wins.
+Send your key as a header - preferred, since query strings tend to end up
+in access logs, proxy logs, and `Referer` headers:
+
+```
+X-API-Key: YOUR_API_KEY
+```
+
+A `?key=` query parameter also works, kept for compatibility with older
+integrations and quick one-off `curl` commands:
 
 ```
 ?key=YOUR_API_KEY
 ```
 
-```
-X-API-Key: YOUR_API_KEY
-```
+If both are present, the header wins.
 
 Treat your key like a password - anyone with it can upload, list, and
 delete on your account. Prefer the `X-API-Key` header over the query
@@ -230,19 +235,21 @@ rather not add a dependency.
 
 ```bash
 # Upload a file
-curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+curl "https://yourimageshare.com/api" \
+  -H "X-API-Key: YOUR_API_KEY" \
   -F "uploads=@/path/to/photo.jpg"
 
 # Upload a file that auto-deletes after 1 hour
-curl "https://yourimageshare.com/api?key=YOUR_API_KEY" \
+curl "https://yourimageshare.com/api" \
+  -H "X-API-Key: YOUR_API_KEY" \
   -F "uploads=@/path/to/photo.jpg" \
   -F "expires_in=3600"
 
 # List uploads
-curl "https://yourimageshare.com/api?key=YOUR_API_KEY"
+curl "https://yourimageshare.com/api" -H "X-API-Key: YOUR_API_KEY"
 
 # Delete an upload
-curl -X DELETE "https://yourimageshare.com/api/aB3xY9qRz1?key=YOUR_API_KEY"
+curl -X DELETE "https://yourimageshare.com/api/aB3xY9qRz1" -H "X-API-Key: YOUR_API_KEY"
 ```
 
 ### JavaScript (fetch)
@@ -255,8 +262,9 @@ async function uploadFile(file) {
   const form = new FormData();
   form.append('uploads', file);
 
-  const res = await fetch(`${BASE}?key=${API_KEY}`, {
+  const res = await fetch(BASE, {
     method: 'POST',
+    headers: { 'X-API-Key': API_KEY },
     body: form,
   });
   const json = await res.json();
@@ -265,12 +273,17 @@ async function uploadFile(file) {
 }
 
 async function listUploads(page = 1) {
-  const res = await fetch(`${BASE}?key=${API_KEY}&page=${page}`);
+  const res = await fetch(`${BASE}?page=${page}`, {
+    headers: { 'X-API-Key': API_KEY },
+  });
   return res.json();
 }
 
 async function deleteUpload(id) {
-  const res = await fetch(`${BASE}/${id}?key=${API_KEY}`, { method: 'DELETE' });
+  const res = await fetch(`${BASE}/${id}`, {
+    method: 'DELETE',
+    headers: { 'X-API-Key': API_KEY },
+  });
   return res.json();
 }
 ```
@@ -283,18 +296,20 @@ import requests
 API_KEY = "YOUR_API_KEY"
 BASE = "https://yourimageshare.com/api"
 
+HEADERS = {"X-API-Key": API_KEY}
+
 # Upload a file
 with open("/path/to/photo.jpg", "rb") as f:
-    res = requests.post(BASE, params={"key": API_KEY}, files={"uploads": f})
+    res = requests.post(BASE, headers=HEADERS, files={"uploads": f})
 res.raise_for_status()
 upload = res.json()["data"]
 
 # List uploads
-res = requests.get(BASE, params={"key": API_KEY, "page": 1})
+res = requests.get(BASE, headers=HEADERS, params={"page": 1})
 uploads = res.json()
 
 # Delete an upload
-res = requests.delete(f"{BASE}/{upload['id']}", params={"key": API_KEY})
+res = requests.delete(f"{BASE}/{upload['id']}", headers=HEADERS)
 ```
 
 ### PHP (curl)
@@ -306,9 +321,10 @@ $apiKey = 'YOUR_API_KEY';
 $base = 'https://yourimageshare.com/api';
 
 // Upload a file
-$curl = curl_init("$base?key=$apiKey");
+$curl = curl_init($base);
 curl_setopt_array($curl, [
     CURLOPT_POST => true,
+    CURLOPT_HTTPHEADER => ["X-API-Key: $apiKey"],
     CURLOPT_POSTFIELDS => ['uploads' => new CURLFile('/path/to/photo.jpg')],
     CURLOPT_RETURNTRANSFER => true,
 ]);
@@ -316,7 +332,8 @@ $upload = json_decode(curl_exec($curl), true)['data'];
 curl_close($curl);
 
 // List uploads
-$curl = curl_init("$base?key=$apiKey&page=1");
+$curl = curl_init("$base?page=1");
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["X-API-Key: $apiKey"]);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 $uploads = json_decode(curl_exec($curl), true);
 curl_close($curl);
@@ -352,8 +369,9 @@ func uploadFile(path string) (map[string]any, error) {
     io.Copy(part, file)
     writer.Close()
 
-    req, _ := http.NewRequest("POST", base+"?key="+apiKey, body)
+    req, _ := http.NewRequest("POST", base, body)
     req.Header.Set("Content-Type", writer.FormDataContentType())
+    req.Header.Set("X-API-Key", apiKey)
 
     res, err := http.DefaultClient.Do(req)
     if err != nil {
