@@ -12,8 +12,9 @@ it documents (`yourimageshare.com` and `*.yourimageshare.com`).
 
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
-Instead, report it privately through
-[yourimageshare.com/contact](https://yourimageshare.com/contact). Include:
+Instead, report it privately to **security@yourimageshare.com**, or through
+[yourimageshare.com/contact](https://yourimageshare.com/contact) if you'd
+rather use the form. Include:
 
 - A description of the vulnerability and its impact
 - Steps to reproduce (proof-of-concept code or requests are welcome)
