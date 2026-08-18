@@ -4,15 +4,19 @@
  * https://yourimageshare.com/about/api
  *
  * Adds an "Upload Image (YourImageShare)" button next to the post editor.
- * Set your real API key below (My account > API tab at yourimageshare.com)
- * before or after activating.
+ * Set your Upload-only key below (My account > API tab at
+ * yourimageshare.com - it's the second key on that page, separate from
+ * your main API key) before or after activating. This snippet renders in
+ * every visitor's page source, so use the upload-only key here, never your
+ * main key: the upload-only key can only upload on your behalf, while your
+ * main key can also list and delete your uploads.
  */
 
 if (!defined('IN_MYBB')) {
 	die('This file cannot be accessed directly.');
 }
 
-define('YIS_FORUMUPLOAD_API_KEY', 'YOUR_API_KEY');
+define('YIS_FORUMUPLOAD_API_KEY', 'YOUR_UPLOAD_ONLY_KEY');
 
 $plugins->add_hook('pre_output_page', 'yourimageshare_upload_inject');
 

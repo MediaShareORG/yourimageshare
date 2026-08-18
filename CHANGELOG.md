@@ -12,6 +12,29 @@ per-package release notes.
 
 ## [Unreleased]
 
+- **New: scoped Upload-only key**, alongside the existing full API key, both
+  managed from the API tab on `/my-account`. The full key still does
+  upload+list+delete; the new upload-only key can only upload -
+  `GET /api` and `DELETE /api/{id}` reject it with a `401`. All six forum
+  plugins/snippets (`smf/`, `mybb/`, `phpbb/`, and the `fluxbb`/`punbb`/
+  `zetaboards` instructions) now default to `YOUR_UPLOAD_ONLY_KEY` instead
+  of the full key, since that's the one case in this repo where a key
+  routinely renders in every visitor's page source - a leaked upload-only
+  key can only be used to upload on the account's behalf, not enumerate or
+  delete its uploads. Rebuilt `yourimageshare-smf.zip`,
+  `yourimageshare-mybb.zip`, and `yourimageshare-phpbb.zip` from the
+  updated sources. `API.md`, `README.md`, and `openapi.yaml` all document
+  the new key and when to use it over the full one; no change to the JS/
+  Python SDKs, MCP server, or Discord bot - they're trusted server-side
+  code, not the page-source-exposure case this addresses, and the request/
+  response contract for existing keys is unchanged (fully backwards
+  compatible - existing full API keys keep working exactly as before, this
+  only adds a second, narrower key type).
+- Hardened server-side API-key storage: keys are now encrypted at rest
+  (previously plaintext), authenticated via an indexed SHA-256 lookup hash
+  rather than the encrypted value directly. Purely a storage-layer change -
+  no effect on how API consumers send a key (`?key=` or `X-API-Key`, same
+  as before).
 - Added `discord/` - a Discord bot (`/upload file:<attachment>
   [expires_in_days]`) wrapping the existing public API + JS SDK. v1 uploads
   under a single shared account (the bot's own API key), same model most

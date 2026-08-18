@@ -13,6 +13,7 @@ available, see [Client libraries](#client-libraries) below.
 
 - [Getting an API key](#getting-an-api-key)
 - [Authentication](#authentication)
+- [Upload-only key](#upload-only-key)
 - [Endpoints](#endpoints)
   - [POST /api - Upload a file](#post-api---upload-a-file)
   - [GET /api - List your uploads](#get-api---list-your-uploads)
@@ -29,6 +30,10 @@ the **API** tab. Your key is shown there, along with a **Regenerate**
 button. Regenerating a key invalidates the old one immediately, so update
 anywhere it's in use before you click it.
 
+That same tab also has a second, independent **Upload-only key** - see
+[Upload-only key](#upload-only-key) below before you paste any key into a
+forum plugin or other place that renders in page source.
+
 ## Authentication
 
 Send your key one of two ways. If both are present, the query parameter
@@ -43,7 +48,28 @@ X-API-Key: YOUR_API_KEY
 ```
 
 Treat your key like a password - anyone with it can upload, list, and
-delete on your account.
+delete on your account. Prefer the `X-API-Key` header over the query
+parameter where you can: query strings tend to end up in access logs,
+proxy logs, and `Referer` headers, while headers generally don't.
+
+## Upload-only key
+
+Your account has two keys, both shown on the API tab:
+
+- **API key** - full access: upload, list, and delete. Use this for
+  server-side code and trusted tools you control (scripts, the SDKs, the
+  MCP server, a bot with its own server-side config).
+- **Upload-only key** - upload only; `GET /api` (list) and
+  `DELETE /api/{id}` both reject it with a `401`. Use this anywhere the key
+  ends up visible to other people, most commonly a forum plugin's embedded
+  `<script>window.YIS_API_KEY = "...";</script>` tag, which every visitor
+  can see in page source. If that value leaks, the worst case is someone
+  uploads files under your account - not that they can enumerate or delete
+  your existing uploads.
+
+Both key types work with the same `?key=`/`X-API-Key` mechanics above -
+the server enforces the scope, not the client. Regenerate either key
+independently from the API tab at any time.
 
 ## Endpoints
 

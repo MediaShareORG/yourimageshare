@@ -5,12 +5,20 @@
  * Adds an "Upload Image" button next to post-editor textareas. On upload,
  * inserts [img]direct-url[/img] BBCode at the cursor position.
  *
- * Setup: set an API key before this script loads:
- *   <script>window.YIS_API_KEY = "YOUR_API_KEY";</script>
+ * Setup: set your Upload-only key (My account > API tab - the second key
+ * on that page, separate from your main API key) before this script loads:
+ *   <script>window.YIS_API_KEY = "YOUR_UPLOAD_ONLY_KEY";</script>
  *   <script src="https://yourimageshare.com/assets/js/forum-upload.js"></script>
+ *
+ * Use the upload-only key here, never your main API key - this script's
+ * output (including whatever key you set) sits in the page source of
+ * every visitor, and the upload-only key can only upload on your behalf,
+ * while your main key can also list and delete your uploads.
  *
  * Advanced: call YISForumUpload.init({ apiKey, bbcode, selector }) manually
  * instead of relying on window.YIS_API_KEY / the automatic textarea scan.
+ * Either key type works with apiKey/YIS_API_KEY - the server enforces the
+ * scope, not this script.
  */
 (function () {
     'use strict';

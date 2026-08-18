@@ -21,6 +21,13 @@ Sign in to your [account](https://yourimageshare.com/my-account) and open
 the **API** tab. Your key is shown there, along with a **Regenerate**
 button.
 
+That tab also has a separate, scoped **Upload-only key** - use that one
+instead anywhere the key ends up in something other people can see (a
+forum plugin's page-source snippet, a public config file), since it can
+only upload and not list/delete. See [Upload-only key](API.md#upload-only-key)
+in the full reference. The [forum plugins](#forum-plugins) below already
+use it.
+
 ## Quick example
 
 ```bash
@@ -98,7 +105,10 @@ Setup instructions are in the comments at the top of each file, and on the
 ## Forum plugins
 
 A real "Upload Image" button next to your forum's post editor - each one
-uploads through `/api` and inserts BBCode at your cursor:
+uploads through `/api` and inserts BBCode at your cursor. All six are
+configured with your **Upload-only key** (not your main API key), since
+the key renders in every visitor's page source and the upload-only key
+can only upload on your behalf - see [Upload-only key](API.md#upload-only-key).
 
 - [`phpbb/`](forum-plugins/phpbb) - a real phpBB 3.2/3.3 extension ([download](forum-plugins/yourimageshare-phpbb.zip))
 - [`smf/`](forum-plugins/smf) - a real SMF package ([download](forum-plugins/yourimageshare-smf.zip))

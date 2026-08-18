@@ -3,8 +3,13 @@
  * YourImageShare Upload for SMF.
  * https://yourimageshare.com/about/api
  *
- * Set your real API key below (My account > API tab at yourimageshare.com),
- * then reinstall/rebuild the package cache if the change doesn't show up.
+ * Set your Upload-only key below (My account > API tab at yourimageshare.com
+ * - it's the second key on that page, separate from your main API key).
+ * This snippet renders in every visitor's page source, so use the
+ * upload-only key here, never your main key: the upload-only key can only
+ * upload on your behalf, while your main key can also list and delete your
+ * uploads. Then reinstall/rebuild the package cache if the change doesn't
+ * show up.
  */
 
 if (!defined('SMF'))
@@ -14,7 +19,7 @@ function yis_forumupload_load()
 {
 	global $context;
 
-	$api_key = 'YOUR_API_KEY';
+	$api_key = 'YOUR_UPLOAD_ONLY_KEY';
 
 	$context['html_headers'] .= '
 	<script>window.YIS_API_KEY = ' . json_encode($api_key) . ';</script>

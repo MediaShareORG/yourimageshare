@@ -146,10 +146,22 @@ components:
       type: apiKey
       in: query
       name: key
+      description: >
+        Your account's API key or upload-only key (My account > API tab).
+        The full API key can upload, list, and delete. The upload-only key
+        can only upload - list/delete reject it with 401. Use the
+        upload-only key anywhere the value ends up visible to others (e.g.
+        embedded in a page), and the full key only in trusted server-side
+        code. If both this and the header are present, this query
+        parameter wins.
     apiKeyHeader:
       type: apiKey
       in: header
       name: X-API-Key
+      description: >
+        Same as the `key` query parameter above (full key or upload-only
+        key); prefer this header over the query parameter where you can,
+        since query strings tend to end up in access/proxy logs.
 
   schemas:
     Upload:

@@ -6,18 +6,22 @@ directly to your template.
 
 ## Setup
 
-1. Get an API key: sign in at [yourimageshare.com](https://yourimageshare.com),
-   open "My account" > the API tab.
+1. Get your Upload-only key: sign in at [yourimageshare.com](https://yourimageshare.com),
+   open "My account" > the API tab. It's the second key on that page,
+   separate from your main API key - use it here, since this snippet
+   renders in every visitor's page source and the upload-only key can only
+   upload, never list or delete your uploads (your main key can do both,
+   so keep that one out of anything rendered publicly).
 2. Open your active style's `main.tpl` (commonly under
    `style/<your-style>/` or `include/template/` depending on version).
 3. Find the `{pun_head}` placeholder in the `<head>` section and paste the
-   snippet below right after it, replacing `YOUR_API_KEY` with your real
-   key.
+   snippet below right after it, replacing `YOUR_UPLOAD_ONLY_KEY` with your
+   real upload-only key.
 4. Save. The "Upload Image (YourImageShare)" button now appears next to
    every post/reply textarea automatically.
 
 ```html
-<script>window.YIS_API_KEY = "YOUR_API_KEY";</script>
+<script>window.YIS_API_KEY = "YOUR_UPLOAD_ONLY_KEY";</script>
 <script src="https://yourimageshare.com/assets/js/forum-upload.js"></script>
 ```
 
