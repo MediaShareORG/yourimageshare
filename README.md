@@ -67,7 +67,7 @@ Ten official SDKs (across nine languages/runtimes, JS/TS counted once with
 two registries), so you don't have to hand-roll the HTTP calls, plus a
 Discord bot built on top of one of them:
 
-- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Also on [JSR](https://jsr.io/@yourimageshare/yourimageshare) as `@yourimageshare/yourimageshare` (pending scope claim) - `npx jsr add @yourimageshare/yourimageshare`, same source, published as TypeScript directly. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
+- **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Also on [JSR](https://jsr.io/@yourimageshare/yourimageshare) as `@yourimageshare/yourimageshare` - `npx jsr add @yourimageshare/yourimageshare`, same source, published as TypeScript directly. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
 - **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
 - **PHP:** [`yourimageshare/yourimageshare-php`](https://packagist.org/packages/yourimageshare/yourimageshare-php) on Packagist - `composer require yourimageshare/yourimageshare-php`. Zero Composer dependencies (uses PHP's own `curl` extension), PHP 7.4+. Own repo ([MediaShareORG/yourimageshare-php](https://github.com/MediaShareORG/yourimageshare-php)) - Packagist requires a root-level `composer.json`, not a monorepo subdirectory.
 - **Go:** [`github.com/MediaShareORG/yourimageshare/go`](https://pkg.go.dev/github.com/MediaShareORG/yourimageshare/go) - `go get github.com/MediaShareORG/yourimageshare/go`. Zero dependencies (standard library only), Go 1.18+. Source: [/go](go).
@@ -81,13 +81,11 @@ Discord bot built on top of one of them:
 
 All SDKs wrap the same three endpoints below (`upload`/`list`/`delete`) with
 typed results and a proper error type on API failures instead of raw HTTP
-handling, and are MIT licensed. .NET, Dart, and JSR are built and verified
+handling, and are MIT licensed. .NET and Dart are built and verified
 against the live API but not yet published - each package name/ID is
 confirmed available and reserved by this doc. .NET needs a NuGet API key
 (Microsoft account); Dart needs an interactive `dart pub login` (Google
-OAuth, browser-based - can't be scripted); JSR needs the `yourimageshare`
-scope claimed on jsr.io (GitHub OAuth) plus either an interactive login or
-a personal access token.
+OAuth, browser-based - can't be scripted).
 
 No official library for your language? The [full HTTP reference](API.md)
 covers everything needed to call the API directly.
