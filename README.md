@@ -63,12 +63,12 @@ curl, JavaScript, Python, PHP, and Go are in [API.md](API.md).
 
 ## Client libraries
 
-Three official SDKs, so you don't have to hand-roll the HTTP calls, plus a
-Discord bot built on top of one of them - source for all four lives in this
-repo:
+Four official SDKs, so you don't have to hand-roll the HTTP calls, plus a
+Discord bot built on top of one of them:
 
 - **JavaScript/TypeScript:** [`yourimageshare`](https://www.npmjs.com/package/yourimageshare) on npm - `npm install yourimageshare`. Zero dependencies, works in Node.js and browsers. Source: [/js](js).
 - **Python:** [`yourimageshare`](https://pypi.org/project/yourimageshare/) on PyPI - `pip install yourimageshare`. One dependency (`requests`), Python 3.8+. Source: [/python](python).
+- **PHP:** [`yourimageshare/yourimageshare-php`](https://github.com/MediaShareORG/yourimageshare-php) - `composer require yourimageshare/yourimageshare-php`. Zero Composer dependencies (uses PHP's own `curl` extension), PHP 7.4+. Own repo (Packagist requires a root-level `composer.json`, not a monorepo subdirectory) - submission to [packagist.org](https://packagist.org) pending.
 - **MCP server** (for AI coding agents - Claude Code, Cursor, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
 - **Discord bot**: `/upload file:<attachment>` slash command, built on the JS SDK. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
 
