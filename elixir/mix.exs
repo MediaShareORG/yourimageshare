@@ -14,7 +14,11 @@ defmodule YourImageShare.MixProject do
       description: description(),
       package: package(),
       name: "YourImageShare",
-      source_url: @source_url
+      source_url: @source_url,
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -26,7 +30,8 @@ defmodule YourImageShare.MixProject do
 
   defp deps do
     [
-      {:req, "~> 0.5"}
+      {:req, "~> 0.5"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 

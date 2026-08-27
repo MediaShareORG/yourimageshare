@@ -75,7 +75,7 @@ Discord bot built on top of one of them:
 - **Ruby:** [`yourimageshare`](https://rubygems.org/gems/yourimageshare) on RubyGems - `gem install yourimageshare`. Zero gem dependencies (stdlib `Net::HTTP` + `json`), Ruby 2.7+. Source: [/ruby](ruby).
 - **.NET:** [`YourImageShare`](https://www.nuget.org/packages/YourImageShare) on NuGet (pending first publish) - `dotnet add package YourImageShare`. One dependency (Microsoft's own `System.Text.Json`), targets netstandard2.0 (.NET Framework and modern .NET both). Source: [/dotnet](dotnet).
 - **Dart/Flutter:** [`yourimageshare`](https://pub.dev/packages/yourimageshare) on pub.dev (pending first publish) - `dart pub add yourimageshare`. One dependency (`http`, the Dart team's own package), Dart 2.17+. Source: [/dart](dart).
-- **Elixir:** [`yourimageshare`](https://hex.pm/packages/yourimageshare) on Hex.pm (pending first publish) - add `{:yourimageshare, "~> 1.0"}` to `mix.exs`. One dependency (`Req`), Elixir 1.14+. Returns `{:ok, result} | {:error, reason}` tagged tuples (the direct equivalent of Go's return style) plus bang variants that raise. Source: [/elixir](elixir).
+- **Elixir:** [`yourimageshare`](https://hex.pm/packages/yourimageshare) on Hex.pm - add `{:yourimageshare, "~> 1.0"}` to `mix.exs`. One dependency (`Req`), Elixir 1.14+. Returns `{:ok, result} | {:error, reason}` tagged tuples (the direct equivalent of Go's return style) plus bang variants that raise. Docs: [hexdocs.pm/yourimageshare](https://yourimageshare.hexdocs.pm). Source: [/elixir](elixir).
 - **MCP server** (for AI coding agents - Claude Code, Cursor, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
 - **Discord bot**: `/upload file:<attachment>` slash command, built on the JS SDK. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
 
@@ -87,9 +87,7 @@ confirmed available and reserved by this doc. .NET needs a NuGet API key
 (Microsoft account); Dart needs an interactive `dart pub login` (Google
 OAuth, browser-based - can't be scripted); JSR needs the `yourimageshare`
 scope claimed on jsr.io (GitHub OAuth) plus either an interactive login or
-a personal access token. Elixir is built and verified and can publish
-non-interactively with a Hex.pm API key, same as the crates.io/RubyGems
-tokens used for Rust/Ruby.
+a personal access token.
 
 No official library for your language? The [full HTTP reference](API.md)
 covers everything needed to call the API directly.
