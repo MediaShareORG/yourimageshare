@@ -1,0 +1,19 @@
+[package]
+name = "yourimageshare"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["YourImageShare"]
+license = "MIT"
+description = "Official Rust client for the YourImageShare upload API (https://yourimageshare.com/about/api)"
+repository = "https://github.com/MediaShareORG/yourimageshare"
+homepage = "https://yourimageshare.com/about/api"
+documentation = "https://docs.rs/yourimageshare"
+readme = "README.md"
+keywords = ["image-hosting", "file-upload", "api-client", "yourimageshare"]
+categories = ["api-bindings", "web-programming::http-client"]
+
+[dependencies]
+ureq = { version = "2", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

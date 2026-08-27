@@ -1,0 +1,95 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace YourImageShare
+{
+    /// <summary>Response shape for a successful upload - same fields as the JS/Python/PHP/Go SDKs' UploadResult.</summary>
+    public sealed class UploadResult
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("path")]
+        public string Path { get; set; } = string.Empty;
+
+        [JsonPropertyName("src")]
+        public string Src { get; set; } = string.Empty;
+
+        [JsonPropertyName("direct")]
+        public string Direct { get; set; } = string.Empty;
+
+        [JsonPropertyName("expires_at")]
+        public string? ExpiresAt { get; set; }
+    }
+
+    /// <summary>One row of a <see cref="YourImageShareClient.ListAsync"/> result.</summary>
+    public sealed class ListedUpload
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("title")]
+        public string? Title { get; set; }
+
+        [JsonPropertyName("path")]
+        public string Path { get; set; } = string.Empty;
+
+        [JsonPropertyName("src")]
+        public string Src { get; set; } = string.Empty;
+
+        [JsonPropertyName("direct")]
+        public string Direct { get; set; } = string.Empty;
+
+        [JsonPropertyName("expires_at")]
+        public string? ExpiresAt { get; set; }
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; } = string.Empty;
+    }
+
+    /// <summary>Pagination info for a <see cref="YourImageShareClient.ListAsync"/> result.</summary>
+    public sealed class ListMeta
+    {
+        [JsonPropertyName("current_page")]
+        public int CurrentPage { get; set; }
+
+        [JsonPropertyName("last_page")]
+        public int LastPage { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+    }
+
+    /// <summary>Response shape for <see cref="YourImageShareClient.ListAsync"/>.</summary>
+    public sealed class ListResult
+    {
+        [JsonPropertyName("data")]
+        public List<ListedUpload> Data { get; set; } = new List<ListedUpload>();
+
+        [JsonPropertyName("meta")]
+        public ListMeta Meta { get; set; } = new ListMeta();
+    }
+
+    /// <summary>Optional parameters for UploadAsync.</summary>
+    public sealed class UploadOptions
+    {
+        /// <summary>Auto-deletes the upload after this many seconds (60 to 2,592,000 = 30 days). Null means a permanent upload.</summary>
+        public int? ExpiresIn { get; set; }
+    }
+
+    /// <summary>The raw `{"type": "success"|"error", ...}` wrapper every endpoint returns - only used to detect an error response before re-parsing the raw body into the shape a caller actually needs.</summary>
+    internal sealed class ApiEnvelope
+    {
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("errors")]
+        public string? Errors { get; set; }
+    }
+}
