@@ -71,17 +71,18 @@ Discord bot built on top of one of them:
 - **PHP:** [`yourimageshare/yourimageshare-php`](https://packagist.org/packages/yourimageshare/yourimageshare-php) on Packagist - `composer require yourimageshare/yourimageshare-php`. Zero Composer dependencies (uses PHP's own `curl` extension), PHP 7.4+. Own repo ([MediaShareORG/yourimageshare-php](https://github.com/MediaShareORG/yourimageshare-php)) - Packagist requires a root-level `composer.json`, not a monorepo subdirectory.
 - **Go:** [`github.com/MediaShareORG/yourimageshare/go`](https://pkg.go.dev/github.com/MediaShareORG/yourimageshare/go) - `go get github.com/MediaShareORG/yourimageshare/go`. Zero dependencies (standard library only), Go 1.18+. Source: [/go](go).
 - **Rust:** [`yourimageshare`](https://crates.io/crates/yourimageshare) on crates.io (pending first publish) - `cargo add yourimageshare`. Two dependencies (`ureq`, blocking/no async runtime, plus `serde`), Rust 1.70+. Source: [/rust](rust).
-- **Ruby:** [`yourimageshare`](https://rubygems.org/gems/yourimageshare) on RubyGems (pending first publish) - `gem install yourimageshare`. Zero gem dependencies (stdlib `Net::HTTP` + `json`), Ruby 2.7+. Source: [/ruby](ruby).
+- **Ruby:** [`yourimageshare`](https://rubygems.org/gems/yourimageshare) on RubyGems - `gem install yourimageshare`. Zero gem dependencies (stdlib `Net::HTTP` + `json`), Ruby 2.7+. Source: [/ruby](ruby).
 - **.NET:** [`YourImageShare`](https://www.nuget.org/packages/YourImageShare) on NuGet (pending first publish) - `dotnet add package YourImageShare`. One dependency (Microsoft's own `System.Text.Json`), targets netstandard2.0 (.NET Framework and modern .NET both). Source: [/dotnet](dotnet).
 - **MCP server** (for AI coding agents - Claude Code, Cursor, and other MCP-compatible clients): [`yourimageshare-mcp`](https://www.npmjs.com/package/yourimageshare-mcp) on npm - `npx yourimageshare-mcp`, no install step. Also listed on [Smithery](https://smithery.ai/servers/team-54m5/yourimageshare) and [Glama](https://glama.ai/mcp/servers/MediaShareORG/yourimageshare). Source: [/mcp](mcp).
 - **Discord bot**: `/upload file:<attachment>` slash command, built on the JS SDK. Self-hosted - run your own instance with your own bot token, same model as the ShareX/Flameshot integrations below, not a public bot we run. Source: [/discord](discord).
 
 All seven SDKs wrap the same three endpoints below (`upload`/`list`/`delete`)
 with typed results and a proper error type on API failures instead of raw
-HTTP handling, and are MIT licensed. Rust, Ruby, and .NET are built and
-verified against the live API but not yet published to their registries -
-each package name/ID is confirmed available and reserved by this doc; the
-`go install`/`pip install`-style one-liners above will work once published.
+HTTP handling, and are MIT licensed. Rust and .NET are built and verified
+against the live API but not yet published to their registries - each
+package name/ID is confirmed available and reserved by this doc. Rust is
+blocked on crates.io's account-level "verified email" requirement; .NET
+needs a Microsoft account to get a NuGet API key.
 
 No official library for your language? The [full HTTP reference](API.md)
 covers everything needed to call the API directly.
