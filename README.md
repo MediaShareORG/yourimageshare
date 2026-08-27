@@ -122,6 +122,36 @@ All six share one underlying widget, [`forum-upload.js`](forum-plugins/forum-upl
 fixes/improvements apply everywhere at once. Full setup instructions and
 downloads are also on the [live docs page](https://yourimageshare.com/about/api#forum-plugins).
 
+## WordPress plugin
+
+[`yourimageshare-media-offload/`](wordpress-plugin/yourimageshare-media-offload)
+([download](wordpress-plugin/yourimageshare-media-offload.zip)) - offloads
+your Media Library to YourImageShare instead of local disk: new image/video
+uploads go through `/api` automatically, the local file (and every
+generated thumbnail size) is deleted once the remote copy is confirmed, and
+every WordPress attachment URL (block editor, featured images, galleries,
+REST API) resolves to the YourImageShare-hosted file - no shortcode, no
+workflow change. Built for the common shared-hosting problem of a Media
+Library outgrowing a small storage quota. Uses the same **Upload-only key**
+pattern as the forum plugins above; an optional full API key enables
+deleting the remote copy when an attachment is deleted in WordPress (or
+when restoring a file to local storage and choosing to remove the remote
+copy).
+
+v1.1.0 adds: bulk-offload for an *existing* Media Library (rate-limit-aware
+batches, not just new uploads going forward), a one-click **Restore to
+local** action so offloading isn't a one-way door, a Media Library status
+column + row actions, and a dismissible admin notice for offload failures.
+Dedicated top-level admin menu, icon is the site's own Pacifico "Y"
+wordmark extracted as a real vector path from the font file. Audited
+against the [WordPress.org detailed plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/)
+(external-service disclosure in both the readme and the settings page,
+nonces + capability checks on every AJAX action, no bundled jQuery/CDN
+assets, conservative `uninstall.php`). Not yet published to the
+WordPress.org Plugin Directory - the code is complete and installable
+manually (zip the folder, upload via Plugins > Add New > Upload Plugin) in
+the meantime.
+
 ## Rate limits
 
 Each API key gets 20 requests/minute and 500 requests/day by default, plus a
